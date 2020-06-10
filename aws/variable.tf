@@ -1,8 +1,3 @@
-variable "instance_name" {
-  description = "instance name"
-  type = string
-}
-
 variable "ami" {
   description = "Amazon Machine Image(usually ubuntu 18.04)"
   type = string
