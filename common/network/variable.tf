@@ -1,6 +1,6 @@
 variable "system_name"{
     type = string
 }
-variable "region"{
+variable "availability_zone"{
     type = string
 }
