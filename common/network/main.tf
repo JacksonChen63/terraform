@@ -14,7 +14,7 @@ resource "aws_internet_gateway" "jackson_chen_gateway" {
 resource "aws_subnet" "jackson_chen_subnet" {
   vpc_id            = aws_vpc.jackson_chen_vpc.id
   cidr_block        = "10.0.10.0/24"
-  availability_zone = "us-west-2a"
+  availability_zone = "${var.region}"
   map_public_ip_on_launch = true
   depends_on = [aws_internet_gateway.jackson_chen_gateway]
   tags = {
@@ -41,5 +41,4 @@ resource "aws_route_table_association" "jackson_chen_route_table_association" {
 
 resource "aws_network_interface" "jackson_chen_netwrok_interface" {
   subnet_id       = aws_subnet.jackson_chen_subnet.id
-#  security_groups = [aws_security_group.jackson_chen_sg.id]
 }
