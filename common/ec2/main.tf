@@ -1,8 +1,8 @@
 resource "aws_security_group" "jackson_chen_sg" {
 
-  name        = "Jackson-Chen-sg"
-  description = "Jackson-Chen-sg"
-  vpc_id      = aws_vpc.jackson_chen_vpc.id
+  name        = "${var.system_name}-sg"
+  description = "${var.system_name}-sg"
+  vpc_id      = "${var.vpc_id}" 
 
   ingress {
     description      = "TLS from VPC"
@@ -29,58 +29,12 @@ resource "aws_security_group" "jackson_chen_sg" {
   }
 }
 
-resource "aws_vpc" "jackson_chen_vpc" {
-  cidr_block       = "10.0.0.0/16"
-  instance_tenancy = "default"
-
-  tags = {
-    Name = "Jackson-Chen-vpc"
-  }
-}
-
-resource "aws_internet_gateway" "jackson_chen_gateway" {
-  vpc_id = aws_vpc.jackson_chen_vpc.id
-}
-
-resource "aws_subnet" "jackson_chen_subnet" {
-  vpc_id            = aws_vpc.jackson_chen_vpc.id
-  cidr_block        = "10.0.10.0/24"
-  availability_zone = "us-west-2a"
-  map_public_ip_on_launch = true
-  depends_on = [aws_internet_gateway.jackson_chen_gateway]
-  tags = {
-    Name = "Jackson_Chen_subnet"
-  }
-}
-
-resource "aws_route_table" "jackson_chen_route_table" {
-  vpc_id = aws_vpc.jackson_chen_vpc.id
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.jackson_chen_gateway.id
-  }
-  tags = {
-    Name = "Jackson-Chen"
-  }
-}
-
-resource "aws_route_table_association" "jackson_chen_route_table_association" {
-  subnet_id      = aws_subnet.jackson_chen_subnet.id
-  route_table_id = aws_route_table.jackson_chen_route_table.id
-}
-
-resource "aws_network_interface" "jackson_chen_netwrok_interface" {
-  subnet_id       = aws_subnet.jackson_chen_subnet.id
-  security_groups = [aws_security_group.jackson_chen_sg.id]
-}
-
 resource "aws_instance" "jackson-ec2" {
-  ami             = "ami-0892d3c7ee96c0bf7"
-  instance_type   = "m4.large"
-  key_name        = "jackson_chen_studyaccount"
-  subnet_id       = aws_subnet.jackson_chen_subnet.id
-  private_ip      = "10.0.10.50"
+  ami             = "${var.ami}"
+  instance_type   = "${var.instance_type}"
+  key_name        = "${var.key_name}"
+  subnet_id       = "${var.subnet_id}"
+  private_ip      = "${var.private_ip}"
   iam_instance_profile = aws_iam_instance_profile.jackson_chen_policy_profile.id
   vpc_security_group_ids = [
     "${aws_security_group.jackson_chen_sg.id}"
@@ -90,15 +44,14 @@ resource "aws_instance" "jackson-ec2" {
   }
 
   tags          = {
-      Name = "Jackson_Chen"
+      Name = "${var.system_name}"
   }
 }
 
-resource "aws_eip" "eip" {
+resource "aws_eip" "this" {
   vpc = true
-  instance                  = aws_instance.jackson-ec2.id
-  depends_on                = [aws_internet_gateway.jackson_chen_gateway]
+  instance = aws_instance.jackson-ec2.id
   tags          = {
-      Name = "Jackson_Chen"
+      Name = "${var.system_name}-eip"
   }
 }
