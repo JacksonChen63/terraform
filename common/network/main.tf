@@ -14,7 +14,7 @@ resource "aws_internet_gateway" "jackson_chen_gateway" {
 resource "aws_subnet" "jackson_chen_subnet_1" {
   vpc_id            = aws_vpc.jackson_chen_vpc.id
   cidr_block        = "10.0.10.0/24"
-  availability_zone = "${var.availability_zone}"
+  availability_zone = "${var.availability_zone_a}"
   map_public_ip_on_launch = true
   depends_on = [aws_internet_gateway.jackson_chen_gateway]
   tags = {
@@ -25,7 +25,7 @@ resource "aws_subnet" "jackson_chen_subnet_1" {
 resource "aws_subnet" "jackson_chen_subnet_2" {
   vpc_id            = aws_vpc.jackson_chen_vpc.id
   cidr_block        = "10.0.20.0/24"
-  availability_zone = "${var.availability_zone}"
+  availability_zone = "${var.availability_zone_b}"
   map_public_ip_on_launch = true
   depends_on = [aws_internet_gateway.jackson_chen_gateway]
   tags = {

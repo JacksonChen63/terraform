@@ -7,5 +7,6 @@ include {
 }
 
 inputs = {
-   availability_zone = "us-west-2a"
+   availability_zone_a = "us-west-2a"
+   availability_zone_b = "us-west-2b"
 }
