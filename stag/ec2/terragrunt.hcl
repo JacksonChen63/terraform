@@ -13,7 +13,7 @@ dependency "network" {
 
 inputs = {
    vpc_id              = dependency.network.outputs.vpc_id
-   subnet_id           = dependency.network.outputs.subnet_id
+   subnet_id_1           = dependency.network.outputs.subnet_id_1
    internet_gateway_id = dependency.network.outputs.internet_gateway_id
    private_ip          = "10.0.10.50"
    key_name            = "jackson_chen_studyaccount"
