@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jackson-chen-pod
+  labels:
+    app: jackson-chen
+  namespace: default
+
+spec:
+  containers:
+  - name: jackson-chen-first-container
+    image: wrre/hello-kubernetes-client:v1
+    command: ['sh', '-c', 'echo the container is running && sleep 240']
+  initContainers:
+  - name: init-jackson-chen-first-container
+    image: wrre/hello-kubernetes-client:v1
+    command: ['sh', '-c', 'echo hello']
+  - name: init-jackson-chen-second-container
+    image: wrre/hello-kubernetes-client:v1
+    command: ['sh', '-c', 'echo hello again']
