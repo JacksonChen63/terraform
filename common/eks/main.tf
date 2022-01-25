@@ -46,6 +46,9 @@ resource "aws_eks_cluster" "jackson-chen-eks-cluster" {
     subnet_ids         = [var.subnet_id_1, var.subnet_id_2]
     security_group_ids = [aws_security_group.jackson-chen-eks-cluster.id]
   }
+  tags = {
+    Name               = "${var.cluster_name}"
+  }
 }
 
 resource "aws_eks_node_group" "eks-node" {
@@ -63,4 +66,7 @@ resource "aws_eks_node_group" "eks-node" {
     data.aws_iam_policy.AmazonEKS_CNI_Policy,
     data.aws_iam_policy.AmazonEC2ContainerRegistryReadOnly,
   ]
+  tags = {
+    Name               = "${var.cluster_name}-node"
+  }
 }
