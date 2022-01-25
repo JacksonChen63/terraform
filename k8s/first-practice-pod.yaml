@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jackson-chen-practice
+  labels:
+    app: jackson-chen
+  namespace: default
+
+spec:
+  containers:
+  - name: jackson-chen-first-container
+    image: wrre/hello-kubernetes-client:v1 
+    ports: 
+    - name: jackson-port
+      containerPort: 3000
+  - name: jackson-chen-first-container2
+    image: nginx
+    ports: 
+    - name: nginx 
+      containerPort: 3001
