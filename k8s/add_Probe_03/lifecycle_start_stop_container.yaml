@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    test: start
+  name: start-stop-container
+spec:
+  containers:
+  - name: liveness
+    image: wrre/hello-kubernetes-client:v1
+    ports:
+    - name: jackson
+      containerPort: 80
+    lifecycle:
+      postStart:
+        exec:
+          command: ["/bin/sh","-c","touch test.txt"]
+    readinessProbe:
+      exec:
+        command:
+        - cat
+        - /app/test.txt
+      initialDelaySeconds: 5
+      periodSeconds: 5
+    livenessProbe:
+      exec:
+        command:
+        - cat
+        - /app/test.txt
+      initialDelaySeconds: 5
+      periodSeconds: 5
