@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: lb-nginx
+  namespace: default
+  labels:
+    app: jackson-chen-nginxxx
+spec:
+  type: LoadBalancer
+  ports:
+  - name: "http"
+    port: 80
+    targetPort: 80
+  selector:
+    app: jackson-chen-nginxxx
