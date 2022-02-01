@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: jackson-chen-nginx-ingress
+  name: jackson-chen-nginx-ingress
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: jackson-chen-nginx-ingress
+  template:
+    metadata:
+      labels:
+        app: jackson-chen-nginx-ingress
+    spec:
+      containers:
+      - name: jackson-chen-nginx-ingress
+        image: nginx
+        ports:
+        - containerPort: 80

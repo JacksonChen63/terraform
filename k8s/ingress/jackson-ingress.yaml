@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jackson-chen-nginx-ingress
+spec:
+  defaultBackend:
+    service:
+      name: jackson-chen-nginx-default-backend
+      port:
+        number: 80
+  rules:
+  - host: jackson-chen.example.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: jackson-chen-nginx-default-backend
+            port:
+              number: 80
+      - pathType: Prefix
+        path: /testnewpath
+        backend:
+          service:
+            name: jackson-chen-nginx-default-backend
+            port:
+              number: 81
