@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: configmap
+  name: jackson-chen-configmap-with-deployment
+data:
+  log_level: INFO
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configmap_with_deployment
+spec:
+  replica: 3
+  template:
+    metadata:
+      labels:
+        app: jackson-deployment
+    spec:
+      containers:
+      - name: jackson-deployment
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: jackson-chen-configmap-with-deployment
+
+

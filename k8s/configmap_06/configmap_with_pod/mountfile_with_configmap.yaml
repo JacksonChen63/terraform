@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: configmap
+  name: jackson-chen-pod-use-configmap-with-mountfile
+spec:
+  containers:
+    - name: pod-use-configmap
+      image: nginx
+      volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+  volumes:
+    - name: config-volume
+      configMap:
+        name: jackson-chen-configmap
+  restartPolicy: Never
+
+
+#用mount 的話 , configmap 裡面的 key 會變成檔案名稱 , value 會是檔案裡面的值 , 檔案會放在mountPath 的路徑下
+#第17行是configmap 的名稱
