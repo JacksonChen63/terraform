@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   labels:
     app: configmap
-  name: jackson-chen-configmap-with-deployment
+  name: jackson-chen-configmap-deployment
 data:
   log_level: INFO
 
@@ -12,13 +12,16 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: configmap_with_deployment
+  name: configmap-with-deployment
 spec:
-  replica: 3
+  replicas: 3
+  selector:
+    matchLabels:
+      app: jackson-chen-configmap-deployment
   template:
     metadata:
       labels:
-        app: jackson-deployment
+        app: jackson-chen-configmap-deployment
     spec:
       containers:
       - name: jackson-deployment
@@ -32,5 +35,3 @@ spec:
         - name: config-volume
           configMap:
             name: jackson-chen-configmap-with-deployment
-
-
