@@ -13,3 +13,7 @@ output "subnet_id_2" {
 output "internet_gateway_id" {
   value = aws_internet_gateway.jackson_chen_gateway.id
 }
+
+output "cidr_block" {
+  value = aws_internet_gateway.jackson_chen_gateway.id
+}

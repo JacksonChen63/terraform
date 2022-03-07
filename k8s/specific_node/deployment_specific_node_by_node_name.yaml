@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: jackson-chen-deployment-specific-node217
+  name: jackson-chen-deployment-specific-node217
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: jackson-chen-deployment-specific-node217
+  template:
+    metadata:
+      labels:
+        app: jackson-chen-deployment-specific-node217
+    spec:
+      nodeName: ip-10-0-20-217.us-west-2.compute.internal #在這裡指定 node
+      containers:
+      - name: jackson-chen-deployment-specific-node217
+        image: nginx
+        ports:
+        - containerPort: 80
+      tolerations:   #加了這段 ,  這個 pod 就可以放到 被設置 key = check , values= jackson的污點的節點上
+      - key: "check"
+        operator: "Equal"
+        value: "jackson"
+        effect: "NoExecute"
+        tolerationSeconds: 3600
+
