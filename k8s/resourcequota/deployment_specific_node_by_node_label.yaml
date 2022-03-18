@@ -2,8 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: jackson-chen-deployment-specific-node217
-  name: jackson-chen-deployment-specific-node217
+    app: jackson-chen-deployment-set-resource
+  name: jackson-chen-deployment-set-resource
 spec:
   replicas: 3
   selector:
@@ -19,4 +19,11 @@ spec:
         image: nginx
         ports:
         - containerPort: 80
+        resources:
+          requests:
+            cpu: 200m
+            memory: 0.5Gi
+          limits:
+            cpu: 400m
+            memory: 1Gi
 
