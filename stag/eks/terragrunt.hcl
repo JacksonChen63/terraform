@@ -12,8 +12,8 @@ dependency "network" {
 }
 
 inputs = {
-   cluster_name        = "Jackson-Chen-EKS-Cluster"
+   cluster_name        = "TF-Jackson-Chen-EKS-Cluster"
    eks_vpc_id          = dependency.network.outputs.vpc_id
-   subnet_id_1         = dependency.network.outputs.subnet_id_1
-   subnet_id_2         = dependency.network.outputs.subnet_id_2
+   private_subnet_a    = dependency.network.outputs.private_subnet_a
+   private_subnet_b    = dependency.network.outputs.private_subnet_b
 }

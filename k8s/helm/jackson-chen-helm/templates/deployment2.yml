@@ -1,0 +1,20 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: jackson-chen-helm2-{{.Values.image.repository}} 
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: jackson-chen-helm2
+  template:
+    metadata:
+      labels:
+        app: jackson-chen-helm2
+    spec:
+      containers:
+        - name: {{.Values.image.repository}}-{{.Values.image.tag}}
+          image: nginx 
+          ports:
+            - containerPort: 80
+              protocol: TCP

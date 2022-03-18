@@ -1,19 +1,24 @@
 output "vpc_id" {
-  value = aws_vpc.jackson_chen_vpc.id
+  description = "The ID of the VPC for EKS"
+  value       = aws_vpc.this.id
 }
 
-output "subnet_id_1" {
-  value = aws_subnet.jackson_chen_subnet_1.id
+output "private_subnet_a" {
+  description = "The ID of the subnet_private_a for EKS"
+  value       = aws_subnet.private_a.id
 }
 
-output "subnet_id_2" {
-  value = aws_subnet.jackson_chen_subnet_2.id
+output "private_subnet_b" {
+  description = "The ID of the private_subnet_b for EKS"
+  value       = aws_subnet.private_b.id
 }
 
 output "internet_gateway_id" {
-  value = aws_internet_gateway.jackson_chen_gateway.id
+  description = "The ID of the internet gateway for private subnet"
+  value       = aws_internet_gateway.this.id
 }
 
 output "cidr_block" {
-  value = aws_internet_gateway.jackson_chen_gateway.id
+  description = "The ID of the internet gateway"
+  value       = aws_internet_gateway.this.id
 }

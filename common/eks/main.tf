@@ -1,5 +1,5 @@
-resource "aws_security_group" "jackson-chen-eks-cluster" {
-  name        = "tf-${var.cluster_name}-sg"
+resource "aws_security_group" "eks_cluster" {
+  name        = "${var.cluster_name}-sg"
   description = "Allow local vpc"
   vpc_id      = var.eks_vpc_id
   ingress {
@@ -15,11 +15,11 @@ resource "aws_security_group" "jackson-chen-eks-cluster" {
     cidr_blocks = ["10.0.0.0/16"]
   }
   tags = {
-    Name = "tf-${var.cluster_name}"
+    Name = "${var.cluster_name}"
   }
 }
-resource "aws_security_group" "jackson-chen-eks-node-group" {
-  name        = "tf-${var.cluster_name}-node-sg"
+resource "aws_security_group" "eks_node_group" {
+  name        = "${var.cluster_name}-node-sg"
   description = "Allow local vpc"
   vpc_id      = var.eks_vpc_id
   ingress {
@@ -35,27 +35,27 @@ resource "aws_security_group" "jackson-chen-eks-node-group" {
     cidr_blocks = ["10.0.0.0/16"]
   }
   tags = {
-    Name = "tf-${var.cluster_name}-node-group"
+    Name = "${var.cluster_name}-node-group"
   }
 }
 
-resource "aws_eks_cluster" "jackson-chen-eks-cluster" {
-  name     = "tf-${var.cluster_name}"
-  role_arn = aws_iam_role.jackson-chen-eks-cluster.arn
+resource "aws_eks_cluster" "this" {
+  name     = var.cluster_name
+  role_arn = aws_iam_role.eks_cluster.arn
   vpc_config {
-    subnet_ids         = [var.subnet_id_1, var.subnet_id_2]
-    security_group_ids = [aws_security_group.jackson-chen-eks-cluster.id]
+    subnet_ids         = [var.private_subnet_a, var.private_subnet_b]
+    security_group_ids = [aws_security_group.eks_cluster.id]
   }
   tags = {
-    Name = "tf-${var.cluster_name}"
+    Name = "${var.cluster_name}"
   }
 }
 
-resource "aws_eks_node_group" "eks-node" {
-  cluster_name    = aws_eks_cluster.jackson-chen-eks-cluster.name
-  node_group_name = "tf-${var.cluster_name}-Node"
-  node_role_arn   = aws_iam_role.jackson-chen-eks-node.arn
-  subnet_ids      = [var.subnet_id_1, var.subnet_id_2]
+resource "aws_eks_node_group" "this" {
+  cluster_name    = aws_eks_cluster.this.name
+  node_group_name = "${var.cluster_name}-Node"
+  node_role_arn   = aws_iam_role.eks_node.arn
+  subnet_ids      = [var.private_subnet_a, var.private_subnet_b]
   scaling_config {
     desired_size = 2
     max_size     = 3
@@ -67,6 +67,6 @@ resource "aws_eks_node_group" "eks-node" {
     data.aws_iam_policy.AmazonEC2ContainerRegistryReadOnly,
   ]
   tags = {
-    Name = "tf-${var.cluster_name}-node"
+    Name = "${var.cluster_name}-node"
   }
 }

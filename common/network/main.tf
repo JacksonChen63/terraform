@@ -1,79 +1,79 @@
-resource "aws_vpc" "jackson_chen_vpc" {
+resource "aws_vpc" "this" {
   cidr_block       = "10.0.0.0/16"
   instance_tenancy = "default"
 
   tags = {
-    Name = "tf-${var.system_name}-vpc"
+    Name = "${var.system_name}-vpc"
   }
 }
 
-resource "aws_internet_gateway" "jackson_chen_gateway" {
-  vpc_id = aws_vpc.jackson_chen_vpc.id
+resource "aws_internet_gateway" "this" {
+  vpc_id = aws_vpc.this.id
   tags = {
-    Name = "tf-${var.system_name}-internet-gateway"
+    Name = "${var.system_name}-internet-gateway"
   }
 }
 
-resource "aws_subnet" "jackson_chen_subnet_1" {
-  vpc_id                  = aws_vpc.jackson_chen_vpc.id
+resource "aws_subnet" "private_a" {
+  vpc_id                  = aws_vpc.this.id
   cidr_block              = "10.0.10.0/24"
   availability_zone       = var.availability_zone_a
   map_public_ip_on_launch = true
-  depends_on              = [aws_internet_gateway.jackson_chen_gateway]
+  depends_on              = [aws_internet_gateway.this]
   tags = {
-    Name = "tf-${var.system_name}-subnet-1"
+    Name = "${var.system_name}-private-subnet"
   }
 }
 
-resource "aws_subnet" "jackson_chen_subnet_2" {
-  vpc_id                  = aws_vpc.jackson_chen_vpc.id
+resource "aws_subnet" "private_b" {
+  vpc_id                  = aws_vpc.this.id
   cidr_block              = "10.0.20.0/24"
   availability_zone       = var.availability_zone_b
   map_public_ip_on_launch = true
-  depends_on              = [aws_internet_gateway.jackson_chen_gateway]
+  depends_on              = [aws_internet_gateway.this]
   tags = {
-    Name = "tf-${var.system_name}-subnet-2"
+    Name = "${var.system_name}-private-subnet"
   }
 }
 
-resource "aws_route_table" "jackson_chen_route_table" {
-  vpc_id = aws_vpc.jackson_chen_vpc.id
+resource "aws_route_table" "this" {
+  vpc_id = aws_vpc.this.id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.jackson_chen_gateway.id
+    gateway_id = aws_internet_gateway.this.id
   }
   tags = {
-    Name = "tf-${var.system_name}-route-table"
+    Name = "${var.system_name}-route-table"
   }
 }
 
-resource "aws_route_table_association" "jackson_chen_route_table_association_1" {
-  subnet_id      = aws_subnet.jackson_chen_subnet_1.id
-  route_table_id = aws_route_table.jackson_chen_route_table.id
+resource "aws_route_table_association" "subnet_private_a" {
+  subnet_id      = aws_subnet.private_a.id
+  route_table_id = aws_route_table.this.id
 }
 
-resource "aws_route_table_association" "jackson_chen_route_table_association_2" {
-  subnet_id      = aws_subnet.jackson_chen_subnet_2.id
-  route_table_id = aws_route_table.jackson_chen_route_table.id
+resource "aws_route_table_association" "subnet_private_b" {
+  subnet_id      = aws_subnet.private_b.id
+  route_table_id = aws_route_table.this.id
 }
 
-resource "aws_network_interface" "jackson_chen_netwrok_interface_1" {
-  subnet_id = aws_subnet.jackson_chen_subnet_1.id
+resource "aws_network_interface" "subnet_private_a" {
+  subnet_id = aws_subnet.private_a.id
   tags = {
-    Name = "tf-${var.system_name}-network-interface"
+    Name = "${var.system_name}-network-interface"
   }
 }
 
-resource "aws_network_interface" "jackson_chen_netwrok_interface_2" {
-  subnet_id = aws_subnet.jackson_chen_subnet_2.id
+resource "aws_network_interface" "subnet_private_b" {
+  subnet_id = aws_subnet.private_b.id
   tags = {
-    Name = "tf-${var.system_name}-network-interface"
+    Name = "${var.system_name}-network-interface"
   }
 }
 
-resource "aws_route" "jackson_chen_route_table_eks" {
-  route_table_id         = aws_route_table.jackson_chen_route_table.id
+resource "aws_route" "eks" {
+  route_table_id         = aws_route_table.this.id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.jackson_chen_gateway.id
+  gateway_id             = aws_internet_gateway.this.id
 }
