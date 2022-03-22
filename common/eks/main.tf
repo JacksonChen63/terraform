@@ -65,8 +65,31 @@ resource "aws_eks_node_group" "this" {
     data.aws_iam_policy.AmazonEKSWorkerNodePolicy,
     data.aws_iam_policy.AmazonEKS_CNI_Policy,
     data.aws_iam_policy.AmazonEC2ContainerRegistryReadOnly,
+    aws_launch_template.this
   ]
   tags = {
     Name = "${var.cluster_name}-node"
+  }
+}
+
+resource "aws_launch_template" "this" {
+  name = "${var.cluster_name}-Node"
+  cpu_options {
+    core_count       = 4
+    threads_per_core = 2
+  }
+  instance_type = "t2.micro"
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 1
+    instance_metadata_tags      = "enabled"
+  }
+  tag_specifications {
+    resource_type = "instance"
+
+    tags = {
+      Name = "${var.cluster_name}"
+    }
   }
 }
