@@ -42,6 +42,13 @@ resource "aws_security_group" "eks_node_group" {
 resource "aws_eks_cluster" "this" {
   name     = var.cluster_name
   role_arn = aws_iam_role.eks_cluster.arn
+  enabled_cluster_log_types = [
+    "audit",
+    "api",
+    "authenticator",
+    "controllerManager",
+    "scheduler"
+  ]
   vpc_config {
     subnet_ids         = [var.private_subnet_a, var.private_subnet_b]
     security_group_ids = [aws_security_group.eks_cluster.id]
@@ -56,6 +63,10 @@ resource "aws_eks_node_group" "this" {
   node_group_name = "${var.cluster_name}-Node"
   node_role_arn   = aws_iam_role.eks_node.arn
   subnet_ids      = [var.private_subnet_a, var.private_subnet_b]
+  launch_template {
+    name    = aws_launch_template.this.name
+    version = aws_launch_template.this.latest_version
+  }
   scaling_config {
     desired_size = 2
     max_size     = 3
@@ -73,11 +84,7 @@ resource "aws_eks_node_group" "this" {
 }
 
 resource "aws_launch_template" "this" {
-  name = "${var.cluster_name}-Node"
-  cpu_options {
-    core_count       = 4
-    threads_per_core = 2
-  }
+  name          = "${var.cluster_name}-Node"
   instance_type = "t2.micro"
   metadata_options {
     http_endpoint               = "enabled"
